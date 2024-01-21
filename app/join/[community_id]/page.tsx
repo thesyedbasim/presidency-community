@@ -1,0 +1,42 @@
+import { getAuthUser } from '@/lib/state/auth';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import { getMemberByUserAndCommunityById } from '@/lib/supabase/database/queries/public';
+import JoinCommunityCard from './components/JoinCommunityCard';
+
+const JoinCommunityPage = async ({
+  params,
+}: {
+  params: { community_id: string };
+}) => {
+  const supabase = createServerComponentClient({ cookies });
+
+  const user = await getAuthUser(supabase);
+  if (!user) {
+    return redirect('/login');
+  }
+
+  const { data: member, error } = await getMemberByUserAndCommunityById(
+    supabase,
+    {
+      user_id: user.id,
+      community_id: params.community_id,
+    }
+  );
+
+  //handle-error
+
+  // redirect if user present in community
+  if (member) {
+    return redirect(`/communities/${params.community_id}`);
+  }
+
+  return (
+    <main className="grid place-items-center">
+      <JoinCommunityCard user_id={user.id} community_id={params.community_id} />
+    </main>
+  );
+};
+
+export default JoinCommunityPage;
