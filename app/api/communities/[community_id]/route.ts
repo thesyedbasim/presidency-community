@@ -6,7 +6,8 @@ export async function GET(
   request: Request,
   { params }: { params: { community_id: string } }
 ) {
-  const supabase = createRouteHandlerClient({ cookies });
+  const cookieStore = cookies();
+  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
   const community_id = params.community_id;
 

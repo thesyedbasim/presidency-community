@@ -10,23 +10,18 @@ import { MemberDetail } from '@/lib/types/database/public/members';
 import { MoreMemberOptions } from './MoreOptions';
 import { Badge } from '@/components/ui/badge';
 import { isAdmin, isModerator } from '@/lib/utils/memberRole';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
-import { getMemberFromAuthUser } from '@/lib/supabase/database/queries/public/members';
 
 type CardProps = React.ComponentProps<typeof Card>;
 
 export async function MembersContainer({
   className,
   members,
+  authUserMember,
   ...props
-}: CardProps & { members: MemberDetail[]; community_id: string }) {
-  const supabase = createServerComponentClient({ cookies });
-
-  const { data: authUserMember } = await getMemberFromAuthUser(supabase, {
-    community_id: props.community_id,
-  });
-
+}: CardProps & {
+  members: MemberDetail[];
+  authUserMember?: MemberDetail;
+}) {
   return (
     <Card className={cn('w-full', className)} {...props}>
       <CardHeader>
@@ -47,6 +42,9 @@ export async function MembersContainer({
                     {member.user.name}
                   </p>
                   <Badge>{member.role}</Badge>
+                  {authUserMember?.id === member.id && (
+                    <Badge variant="outline">(You)</Badge>
+                  )}
                 </div>
                 <p className="text-sm text-muted-foreground">
                   {member.user.email}

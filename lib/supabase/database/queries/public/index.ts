@@ -17,7 +17,8 @@ export async function getUserCommunities(
   const { data, error } = await supabase
     .from('members')
     .select('*, community:community_id(*, channels(*), members(*))')
-    .eq('user_id', user_id);
+    .eq('user_id', user_id)
+    .eq('is_present', true);
 
   //handle-error
   if (error) console.error('error while getting user communities', error);

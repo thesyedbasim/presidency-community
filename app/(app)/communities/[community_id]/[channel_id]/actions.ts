@@ -15,7 +15,9 @@ export const sendMessage = async (
   //handle-constraints
   //handle-error
 
-  const supabase = createServerActionClient({ cookies });
+  const cookieStore = cookies();
+
+  const supabase = createServerActionClient({ cookies: () => cookieStore });
 
   try {
     const messageContent = formData.get('message') as string;

@@ -22,7 +22,9 @@ const MessageFormContainer: React.FC<{
   channel_id: string;
   community_id: string;
 }> = async ({ channel_id, community_id }) => {
-  const supabase = createServerComponentClient({ cookies });
+  const cookieStore = cookies();
+
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const member_id = await getMemberId(supabase, community_id);
 

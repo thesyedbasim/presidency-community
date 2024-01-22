@@ -1,25 +1,13 @@
 import { MessageDetail } from '@/lib/types/database/public/messages';
-import { useEffect, useState } from 'react';
-import { User } from '@supabase/supabase-js';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { getAuthUser } from '@/lib/state/auth';
 import { isAdmin, isModerator } from '@/lib/utils/memberRole';
 import { MoreMessageOptions } from './message-actions/dropdown-menu';
+import { MemberDetail } from '@/lib/types/database/public/members';
 
-const MessageCard: React.FC<{ message: MessageDetail; refProp: any }> = ({
-  message,
-  refProp,
-}) => {
-  const supabase = createClientComponentClient();
-
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    getAuthUser(supabase).then((user) => {
-      setUser(user);
-    });
-  }, [supabase]);
-
+const MessageCard: React.FC<{
+  message: MessageDetail;
+  authMember: MemberDetail | null;
+  refProp: any;
+}> = ({ message, authMember, refProp }) => {
   return (
     <div
       key={message.id}
@@ -37,10 +25,16 @@ const MessageCard: React.FC<{ message: MessageDetail; refProp: any }> = ({
       </div>
       <div className="">
         <MoreMessageOptions
-          message_id={message.id}
-          isAdmin={isAdmin(message.sender.role)}
-          isModerator={isModerator(message.sender.role)}
-          isSender={message.sender.user.id === user?.id}
+          message={message}
+          isAdmin={{
+            sender: isAdmin(message.sender.role),
+            authUser: isAdmin(authMember ? authMember.role : 'member'),
+          }}
+          isModerator={{
+            sender: isModerator(message.sender.role),
+            authUser: isModerator(authMember ? authMember.role : 'member'),
+          }}
+          isSender={message.sender_id === authMember?.id}
         />
       </div>
     </div>

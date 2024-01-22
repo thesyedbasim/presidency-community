@@ -1,4 +1,4 @@
-import SideNav from '@/components/SideNav';
+import SideNav from './components/SideNav';
 import './globals.scss';
 import { cookies } from 'next/headers';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
@@ -9,8 +9,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = () => cookies();
-  const supabase = createServerComponentClient({ cookies: cookieStore });
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
     data: { session },
