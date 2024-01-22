@@ -11,19 +11,31 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import { MemberDetail } from '@/lib/types/database/public/members';
+import Link from 'next/link';
+import { redirectToMembersPage } from '../../actions';
+
+const removeMember = async ({
+  member_id,
+  community_id,
+}: {
+  member_id: string;
+  community_id: string;
+}) => {
+  const res = await fetch(
+    `/api/members/${member_id}?community_id=${community_id}`,
+    {
+      method: 'DELETE',
+    }
+  );
+
+  redirectToMembersPage({ community_id });
+};
 
 export const MoreMemberOptions: React.FC<{
   member: MemberDetail;
   isAuthUserAdmin: boolean;
   isAuthUserModerator: boolean;
 }> = ({ member, isAuthUserAdmin, isAuthUserModerator }) => {
-  const removeMember = async () => {
-    console.log('fn hit');
-    const res = await fetch(`/api/members/${member.id}`, { method: 'DELETE' });
-
-    console.log('res after calling delete api route', res.ok);
-  };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,8 +45,18 @@ export const MoreMemberOptions: React.FC<{
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuGroup>
+          <Link href={`/user/${member.user_id}`}>
+            <DropdownMenuItem>View info</DropdownMenuItem>
+          </Link>
           {(isAuthUserAdmin || isAuthUserModerator) && (
-            <DropdownMenuItem onClick={removeMember}>
+            <DropdownMenuItem
+              onClick={() =>
+                removeMember({
+                  member_id: member.id,
+                  community_id: member.community_id,
+                })
+              }
+            >
               Remove member
             </DropdownMenuItem>
           )}

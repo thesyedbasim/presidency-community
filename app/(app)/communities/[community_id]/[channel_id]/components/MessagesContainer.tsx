@@ -9,10 +9,11 @@ import {
   getMessagesInChannel,
 } from '@/lib/supabase/database/queries/public';
 import { subscribeToChannelMessages } from '@/lib/supabase/realtime';
-import {
-  RealtimePostgresChangesPayload,
-  RealtimePostgresInsertPayload,
-} from '@supabase/supabase-js';
+import { RealtimePostgresChangesPayload, User } from '@supabase/supabase-js';
+import MessageCardSkeleton from './MessageCardSkeleton';
+import { getAuthUser } from '@/lib/state/auth';
+import { getMemberFromAuthUser } from '@/lib/supabase/database/queries/public/members';
+import { MemberDetail } from '@/lib/types/database/public/members';
 
 const MessagesContainer: React.FC<{
   community_id: string;
@@ -20,8 +21,20 @@ const MessagesContainer: React.FC<{
 }> = ({ community_id, channel_id }) => {
   const supabase = createClientComponentClient();
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [messages, setMessages] = useState<MessageDetail[]>([]);
+  const [authMember, setAuthMember] = useState<MemberDetail | null>(null);
   const lastMessageRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  useEffect(() => {
+    getMemberFromAuthUser(supabase, { community_id }).then((member) =>
+      setAuthMember(member.data)
+    );
+  }, [community_id, supabase]);
 
   useEffect(() => {
     lastMessageRef.current &&
@@ -31,6 +44,7 @@ const MessagesContainer: React.FC<{
   //handle-error
   useEffect(() => {
     async function setMessagesValue() {
+      setIsLoading(true);
       const sbUserRes = await supabase.auth.getUser();
       if (!sbUserRes.data.user) return;
 
@@ -41,13 +55,12 @@ const MessagesContainer: React.FC<{
       );
 
       setMessages(messagesData);
+      setIsLoading(false);
     }
 
     subscribeToChannelMessages(
       channel_id,
       (payload: RealtimePostgresChangesPayload<MessageDb>) => {
-        console.log('payload data', payload);
-
         if (payload.eventType === 'INSERT') {
           getMessageById(payload.new.id).then((message) => {
             setMessages((prevMessages) => [...prevMessages, message]);
@@ -67,8 +80,23 @@ const MessagesContainer: React.FC<{
     setMessagesValue();
   }, [community_id, channel_id, supabase.auth]);
 
+  if (isLoading)
+    return (
+      <>
+        <MessageCardSkeleton />
+        <MessageCardSkeleton />
+        <MessageCardSkeleton />
+        <MessageCardSkeleton />
+      </>
+    );
+
   return messages.map((message) => (
-    <MessageCard key={message.id} message={message} refProp={lastMessageRef} />
+    <MessageCard
+      key={message.id}
+      message={message}
+      authMember={authMember}
+      refProp={lastMessageRef}
+    />
   ));
 };
 

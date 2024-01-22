@@ -9,13 +9,15 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import MessageDeleteItem from './dropdown-menu-items/MessageDeleteItem';
+import { MessageDetail } from '@/lib/types/database/public/messages';
+import Link from 'next/link';
 
 export const MoreMessageOptions: React.FC<{
-  message_id: string;
-  isAdmin: boolean;
-  isModerator: boolean;
+  message: MessageDetail;
+  isAdmin: { sender: boolean; authUser: boolean };
+  isModerator: { sender: boolean; authUser: boolean };
   isSender: boolean;
-}> = ({ message_id, isAdmin, isModerator, isSender }) => {
+}> = ({ message, isAdmin, isModerator, isSender }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -25,8 +27,11 @@ export const MoreMessageOptions: React.FC<{
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuGroup>
-          {(isAdmin || isModerator || isSender) && (
-            <MessageDeleteItem message_id={message_id} />
+          <Link href={`/user/${message.sender.user.id}`}>
+            <DropdownMenuItem>View user info</DropdownMenuItem>
+          </Link>
+          {(isAdmin.authUser || isModerator.authUser || isSender) && (
+            <MessageDeleteItem message_id={message.id} />
           )}
         </DropdownMenuGroup>
       </DropdownMenuContent>

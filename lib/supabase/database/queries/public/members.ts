@@ -1,6 +1,7 @@
 import { getAuthUser } from '@/lib/state/auth';
 import { QueryFunction } from '@/lib/supabase';
 import { MemberDetail } from '@/lib/types/database/public/members';
+import { isEmptyError } from '@/lib/utils/postgrestErrors';
 
 enum MemberSelectQueries {
   memberDb = '*',
@@ -101,11 +102,13 @@ export const getMemberByUserAndCommunityById: QueryFunction<
     .single();
 
   //handle-error
-  if (error)
-    console.error(
-      'error while getting member from user id and community id',
-      error
-    );
+  if (error) {
+    if (!isEmptyError(error.code))
+      console.error(
+        'error while getting member from user id and community id',
+        error
+      );
+  }
 
   return { data: data || null, error: null };
 };
@@ -119,7 +122,7 @@ export const updateMemberPresentStatus: QueryFunction<
     .update({ is_present: false })
     .eq('id', member_id);
 
-  if (error) console.log('error while updating member present', error);
+  if (error) console.error('error while updating member present', error);
 
   return { data: null, error };
 };

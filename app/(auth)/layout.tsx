@@ -4,8 +4,8 @@ import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 
 const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
-  const cookieStore = () => cookies();
-  const supabase = createServerComponentClient({ cookies: cookieStore });
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
     data: { session },
@@ -14,9 +14,14 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
   if (session) return redirect('/');
 
   return (
-    <main className="grid place-content-center w-full h-screen">
-      {children}
-    </main>
+    <html lang="en">
+      <head></head>
+      <body>
+        <main className="grid place-content-center w-full h-screen">
+          {children}
+        </main>
+      </body>
+    </html>
   );
 };
 

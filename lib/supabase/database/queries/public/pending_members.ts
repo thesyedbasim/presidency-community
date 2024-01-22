@@ -13,7 +13,7 @@ export async function createPendingCommunityMember(
   if (error)
     console.error('error while creating pending community member', error);
 
-  return { data: null, error } as QueryResponse<null>;
+  return { data: null, error };
 }
 
 export async function getCommunityPendingMembers(

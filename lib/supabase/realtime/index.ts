@@ -23,7 +23,7 @@ export function subscribeToPendingMembers(
   community_id: string,
   callbackFn: (...args: any[]) => any
 ) {
-  supabase
+  return supabase
     .channel('pending-members')
     .on(
       'postgres_changes',
