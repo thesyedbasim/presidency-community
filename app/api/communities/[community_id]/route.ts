@@ -1,4 +1,4 @@
-import { getCommunityById } from '@/lib/supabase/database/queries/public';
+import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 
@@ -11,7 +11,7 @@ export async function GET(
 
   const community_id = params.community_id;
 
-  const communityRes = await getCommunityById(supabase, { id: community_id! });
+  const communityRes = await getCommunityById(supabase, { community_id });
 
   return Response.json(communityRes);
 }

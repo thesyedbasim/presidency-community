@@ -1,6 +1,6 @@
 'use server';
 
-import { createMessage } from '@/lib/supabase/database/queries/public';
+import { createMessage } from '@/lib/supabase/database/queries/public/messages';
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 

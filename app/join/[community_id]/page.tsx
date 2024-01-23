@@ -2,7 +2,7 @@ import { getAuthUser } from '@/lib/state/auth';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
-import { getCommunityById } from '@/lib/supabase/database/queries/public';
+import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
 import { getMemberByUserAndCommunityById } from '@/lib/supabase/database/queries/public/members';
 import JoinCommunityCard from './components/JoinCommunityCard';
 
@@ -33,7 +33,7 @@ const JoinCommunityPage = async ({
   }
 
   const { data: community } = await getCommunityById(supabase, {
-    id: params.community_id,
+    community_id: params.community_id,
   });
 
   return (

@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import { subscribeToPendingMembers } from '@/lib/supabase/realtime';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { getCommunityPendingMembers } from '@/lib/supabase/database/queries/public/pending_members';
+import { getPendingMembersByCommunityId } from '@/lib/supabase/database/queries/public/pending_members';
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -33,7 +33,7 @@ export function PendingMembersContainer({
   );
 
   useEffect(() => {
-    getCommunityPendingMembers(supabase, {
+    getPendingMembersByCommunityId(supabase, {
       community_id: props.community_id,
     }).then((pendingMembersRes) => {
       setPendingMembers(pendingMembersRes.data || []);
@@ -42,7 +42,8 @@ export function PendingMembersContainer({
 
   useEffect(() => {
     const pendingMembersChannel = subscribeToPendingMembers(
-      props.community_id,
+      supabase,
+      { community_id: props.community_id },
       (payload: RealtimePostgresChangesPayload<PendingMemberDb>) => {
         if (payload.eventType === 'INSERT') {
           supabase
