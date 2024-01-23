@@ -1,12 +1,8 @@
-import { unstable_cache } from 'next/cache';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { cache } from 'react';
 
-export const getAuthUser = unstable_cache(
-  async (supabase: SupabaseClient) => {
-    const userRes = await supabase.auth.getUser();
+export const getAuthUser = cache(async (supabase: SupabaseClient) => {
+  const userRes = await supabase.auth.getUser();
 
-    return userRes.data.user;
-  },
-  ['auth-user'],
-  { tags: ['auth'] }
-);
+  return userRes.data.user;
+});
