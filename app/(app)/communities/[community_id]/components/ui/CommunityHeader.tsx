@@ -12,7 +12,7 @@ const CommunityHeader: React.FC<{ community: CommunityDetail }> = ({
       <>
         <div className="grid grid-flow-row gap-1">
           <TypographyH1>{community.name}</TypographyH1>
-          <TypographyMuted>{community.members.length} members</TypographyMuted>
+          <TypographyMuted>{community.member_count} members</TypographyMuted>
         </div>
         <div className="flex gap-2">
           <CommunityMembersButton community_id={community.id} />

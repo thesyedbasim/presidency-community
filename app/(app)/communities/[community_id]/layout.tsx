@@ -24,7 +24,8 @@ export default async function CommunityLayout({
     return redirect('/login');
   }
 
-  const { data: community, error } = await fetchCommunityById(supabase, {
+  // handle-error
+  const { data: community } = await fetchCommunityById(supabase, {
     community_id: params.community_id,
   });
 

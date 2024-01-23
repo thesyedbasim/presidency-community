@@ -2,8 +2,7 @@ import { getAuthUser } from '@/lib/state/auth';
 import { updateMemberPresentStatus } from '@/lib/supabase/database/queries/public/members';
 import { createNotAuthenticatedResponse } from '@/lib/utils/apiErrorResponses';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { revalidatePath, revalidateTag } from 'next/cache';
-import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 

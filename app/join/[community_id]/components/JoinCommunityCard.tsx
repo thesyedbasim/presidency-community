@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter, CardHeader } from '@/components/ui/card';
 import { handleJoinCommunity } from '../actions';
-import { CommunityDetail } from '@/lib/types/database/public/communities';
+import { CommunityBasic } from '@/lib/types/database/public/communities';
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -12,7 +12,7 @@ export default function JoinCommunityCard({
   className,
   community,
   ...props
-}: CardProps & { community: CommunityDetail }) {
+}: CardProps & { community: CommunityBasic }) {
   return (
     <Card className={cn('w-[380px]', className)} {...props}>
       <CardHeader className="">
@@ -20,7 +20,7 @@ export default function JoinCommunityCard({
           {community.name}
         </h3>
         <p className="text-center text-sm text-muted-foreground">
-          {community.members.length} members
+          {community.member_count} members
         </p>
       </CardHeader>
       <CardFooter>

@@ -11,7 +11,8 @@ export default async function UserPage({
   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
-  const { data: user, error } = await getUser(supabase, {
+  // handle-error
+  const { data: user } = await getUser(supabase, {
     user_id: params.user_id,
   });
 

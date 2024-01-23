@@ -11,7 +11,7 @@ export async function handleUserLogin(
   }
 ) {
   // handle-error
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { data } = await supabase.auth.signInWithPassword({
     email,
     password,
   });

@@ -21,12 +21,9 @@ const removeMember = async ({
   member_id: string;
   community_id: string;
 }) => {
-  const res = await fetch(
-    `/api/members/${member_id}?community_id=${community_id}`,
-    {
-      method: 'DELETE',
-    }
-  );
+  await fetch(`/api/members/${member_id}?community_id=${community_id}`, {
+    method: 'DELETE',
+  });
 
   redirectToMembersPage({ community_id });
 };

@@ -1,15 +1,18 @@
 import { QueryFunction } from '@/lib/supabase';
-import { CommunityDetail } from '@/lib/types/database/public/communities';
+import {
+  CommunityBasic,
+  CommunityDetail,
+} from '@/lib/types/database/public/communities';
 import { MemberDb } from '@/lib/types/database/public/members';
-import { QueryResponse } from '@/lib/types/database/public/utils';
 
 interface UserCommunities extends MemberDb {
-  community: CommunityDetail;
+  community: CommunityBasic;
 }
 
 enum CommunityQuery {
   db = '*',
-  user = '*, community:community_id(*, channels(*), members(*))',
+  basic = '*, channels(*)',
+  user = '*, community:community_id(*, channels(*))',
   detail = '*, channels(*), members(*)',
 }
 
@@ -41,5 +44,20 @@ export const getCommunityById: QueryFunction<
 
   if (error) console.error('error while fetching communtity by id', error);
 
-  return { data: data || null, error } as QueryResponse<CommunityDetail>;
+  return { data: data || null, error };
+};
+
+export const getCommunityBasicById: QueryFunction<
+  { community_id: string },
+  CommunityBasic
+> = async (supabase, { community_id }) => {
+  const { data, error } = await supabase
+    .from('communities')
+    .select(CommunityQuery.basic)
+    .eq('id', community_id)
+    .single();
+
+  if (error) console.error('error while fetching communtity by id', error);
+
+  return { data: data || null, error };
 };

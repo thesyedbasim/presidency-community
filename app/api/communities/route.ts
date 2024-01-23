@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
 // get all communities determined by auth user
-export const GET = async (req: NextRequest) => {
+export const GET = async (_: NextRequest) => {
   const cookieStore = cookies();
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 

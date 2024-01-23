@@ -9,7 +9,7 @@ import {
   getMessagesInChannel,
 } from '@/lib/supabase/database/queries/public/messages';
 import { subscribeToChannelMessages } from '@/lib/supabase/realtime';
-import { RealtimePostgresChangesPayload, User } from '@supabase/supabase-js';
+import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import MessageCardSkeleton from './MessageCardSkeleton';
 import { getMemberFromAuthUser } from '@/lib/supabase/database/queries/public/members';
 import { MemberDetail } from '@/lib/types/database/public/members';

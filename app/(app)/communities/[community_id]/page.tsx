@@ -1,4 +1,4 @@
-const CommunityPage = ({ params }: { params: { community_id: string } }) => {
+const CommunityPage = () => {
   return <main>community page empty</main>;
 };
 

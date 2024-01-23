@@ -1,5 +1,8 @@
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import Link from 'next/link';
 
+import { MessageDetail } from '@/lib/types/database/public/messages';
+
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -9,8 +12,6 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import MessageDeleteItem from './dropdown-menu-items/MessageDeleteItem';
-import { MessageDetail } from '@/lib/types/database/public/messages';
-import Link from 'next/link';
 
 export const MoreMessageOptions: React.FC<{
   message: MessageDetail;
