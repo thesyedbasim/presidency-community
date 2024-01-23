@@ -4,10 +4,11 @@ import { MemberDetail } from '@/lib/types/database/public/members';
 import { isEmptyError } from '@/lib/utils/postgrestErrors';
 
 enum MemberSelectQueries {
-  memberDb = '*',
-  memberDetail = '*, user:user_id(*)',
+  db = '*',
+  detail = '*, user:user_id(*)',
 }
 
+/* CREATE */
 export const createMemberFromInvitationAccept: QueryFunction<
   { pending_member_id: string },
   null
@@ -22,21 +23,20 @@ export const createMemberFromInvitationAccept: QueryFunction<
   return { data: null, error };
 };
 
-// depreciated
-export const getCommunityMembers: QueryFunction<
-  { community_id: string },
-  MemberDetail[]
-> = async (supabase, { community_id }) => {
+/* READ */
+export const getMemberById: QueryFunction<
+  { member_id: string },
+  MemberDetail
+> = async (supabase, { member_id }) => {
   const { data, error } = await supabase
     .from('members')
-    .select(MemberSelectQueries.memberDetail)
-    .eq('community_id', community_id)
-    .eq('is_present', true);
+    .select(MemberSelectQueries.detail)
+    .eq('id', member_id)
+    .single();
 
-  //handle-error
-  if (error) console.error('error while getting community members', error);
+  if (error) console.error('error while getting member by id', error);
 
-  return { data: data || [], error: null };
+  return { data: data || null, error: null };
 };
 
 export const getMembersByCommunityId: QueryFunction<
@@ -45,29 +45,13 @@ export const getMembersByCommunityId: QueryFunction<
 > = async (supabase, { community_id }) => {
   const { data, error } = await supabase
     .from('members')
-    .select(MemberSelectQueries.memberDetail)
+    .select(MemberSelectQueries.detail)
     .eq('community_id', community_id)
     .eq('is_present', true);
 
-  //handle-error
   if (error) console.error('error while getting community members', error);
 
   return { data: data || [], error: null };
-};
-
-export const getMemberById: QueryFunction<
-  { member_id: string },
-  MemberDetail
-> = async (supabase, { member_id }) => {
-  const { data, error } = await supabase
-    .from('members')
-    .select(MemberSelectQueries.memberDetail)
-    .eq('id', member_id)
-    .single();
-
-  if (error) console.error('error while getting member by id', error);
-
-  return { data: data || null, error: null };
 };
 
 export const getMemberFromAuthUser: QueryFunction<
@@ -80,14 +64,14 @@ export const getMemberFromAuthUser: QueryFunction<
 
   const { data, error } = await supabase
     .from('members')
-    .select(MemberSelectQueries.memberDetail)
+    .select(MemberSelectQueries.detail)
     .eq('user_id', user.id)
     .eq('community_id', community_id)
     .single();
 
   if (error) console.error('error while getting member auth user', error);
 
-  return { data: data || null, error: null };
+  return { data: data || null, error };
 };
 
 export const getMemberByUserAndCommunityById: QueryFunction<
@@ -96,12 +80,11 @@ export const getMemberByUserAndCommunityById: QueryFunction<
 > = async (supabase, { user_id, community_id }) => {
   const { data, error } = await supabase
     .from('members')
-    .select(MemberSelectQueries.memberDetail)
+    .select(MemberSelectQueries.detail)
     .eq('user_id', user_id)
     .eq('community_id', community_id)
     .single();
 
-  //handle-error
   if (error) {
     if (!isEmptyError(error.code))
       console.error(
@@ -113,6 +96,7 @@ export const getMemberByUserAndCommunityById: QueryFunction<
   return { data: data || null, error: null };
 };
 
+/* UPDATE */
 export const updateMemberPresentStatus: QueryFunction<
   { member_id: string },
   null

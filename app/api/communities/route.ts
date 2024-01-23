@@ -1,5 +1,5 @@
 import { getAuthUser } from '@/lib/state/auth';
-import { getUserCommunities } from '@/lib/supabase/database/queries/public';
+import { getCommunitiesByUserId } from '@/lib/supabase/database/queries/public/communities';
 import { createNotAuthenticatedResponse } from '@/lib/utils/apiErrorResponses';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
@@ -14,7 +14,7 @@ export const GET = async (req: NextRequest) => {
 
   if (!user) return createNotAuthenticatedResponse();
 
-  const { data } = await getUserCommunities(supabase, { user_id: user.id });
+  const { data } = await getCommunitiesByUserId(supabase, { user_id: user.id });
 
   return Response.json({ data, error: null });
 };

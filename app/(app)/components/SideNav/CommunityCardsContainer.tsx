@@ -1,11 +1,11 @@
-import { getUserCommunities } from '@/lib/supabase/database/queries/public';
+import { getCommunitiesByUserId } from '@/lib/supabase/database/queries/public/communities';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import CommunityCard from './CommunityCard';
 import { getAuthUser } from '@/lib/state/auth';
 import { unstable_cache } from 'next/cache';
 
-const fetchUserCommunities = unstable_cache(getUserCommunities, [
+const fetchUserCommunities = unstable_cache(getCommunitiesByUserId, [
   'user-communities',
 ]);
 

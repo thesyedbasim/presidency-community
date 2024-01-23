@@ -1,6 +1,6 @@
 'use server';
 
-import { createPendingCommunityMember } from '@/lib/supabase/database/queries/public/pending_members';
+import { createPendingMember } from '@/lib/supabase/database/queries/public/pending_members';
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -14,7 +14,7 @@ export const handleJoinCommunity = async ({
   const cookieStore = cookies();
   const supabase = createServerActionClient({ cookies: () => cookieStore });
 
-  await createPendingCommunityMember(supabase, {
+  await createPendingMember(supabase, {
     community_id: community_id,
   });
 

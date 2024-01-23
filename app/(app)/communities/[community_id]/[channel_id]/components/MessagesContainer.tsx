@@ -7,11 +7,10 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import {
   getMessageById,
   getMessagesInChannel,
-} from '@/lib/supabase/database/queries/public';
+} from '@/lib/supabase/database/queries/public/messages';
 import { subscribeToChannelMessages } from '@/lib/supabase/realtime';
 import { RealtimePostgresChangesPayload, User } from '@supabase/supabase-js';
 import MessageCardSkeleton from './MessageCardSkeleton';
-import { getAuthUser } from '@/lib/state/auth';
 import { getMemberFromAuthUser } from '@/lib/supabase/database/queries/public/members';
 import { MemberDetail } from '@/lib/types/database/public/members';
 
@@ -48,23 +47,26 @@ const MessagesContainer: React.FC<{
       const sbUserRes = await supabase.auth.getUser();
       if (!sbUserRes.data.user) return;
 
-      const messagesData = await getMessagesInChannel(
-        community_id,
+      const { data: messagesData } = await getMessagesInChannel(supabase, {
         channel_id,
-        sbUserRes.data.user.id
-      );
+      });
 
       setMessages(messagesData);
       setIsLoading(false);
     }
 
-    subscribeToChannelMessages(
-      channel_id,
+    const messageChannel = subscribeToChannelMessages(
+      supabase,
+      { channel_id },
       (payload: RealtimePostgresChangesPayload<MessageDb>) => {
         if (payload.eventType === 'INSERT') {
-          getMessageById(payload.new.id).then((message) => {
-            setMessages((prevMessages) => [...prevMessages, message]);
-          });
+          getMessageById(supabase, { message_id: payload.new.id }).then(
+            ({ data: message }) => {
+              if (!message) return;
+
+              setMessages((prevMessages) => [...prevMessages, message]);
+            }
+          );
         } else if (payload.eventType === 'DELETE') {
           setMessages((prevMessages) => {
             const filteredMessages = prevMessages.filter(
@@ -78,7 +80,11 @@ const MessagesContainer: React.FC<{
     );
 
     setMessagesValue();
-  }, [community_id, channel_id, supabase.auth]);
+
+    return () => {
+      supabase.removeChannel(messageChannel);
+    };
+  }, [community_id, channel_id, supabase]);
 
   if (isLoading)
     return (

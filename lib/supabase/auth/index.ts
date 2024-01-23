@@ -1,13 +1,16 @@
-import supabase from '..';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-export async function handleUserLogin({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) {
-  // handle error
+export async function handleUserLogin(
+  supabase: SupabaseClient,
+  {
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }
+) {
+  // handle-error
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -16,6 +19,6 @@ export async function handleUserLogin({
   return data;
 }
 
-export async function handleUserSignOut() {
+export async function handleUserSignOut(supabase: SupabaseClient) {
   await supabase.auth.signOut();
 }

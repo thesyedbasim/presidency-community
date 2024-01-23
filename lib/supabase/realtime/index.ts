@@ -1,10 +1,11 @@
-import supabase from '..';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 export function subscribeToChannelMessages(
-  channel_id: string,
+  supabase: SupabaseClient,
+  { channel_id }: { channel_id: string },
   callbackFn: (...args: any[]) => any
 ) {
-  supabase
+  return supabase
     .channel('community-channel')
     .on(
       'postgres_changes',
@@ -20,7 +21,8 @@ export function subscribeToChannelMessages(
 }
 
 export function subscribeToPendingMembers(
-  community_id: string,
+  supabase: SupabaseClient,
+  { community_id }: { community_id: string },
   callbackFn: (...args: any[]) => any
 ) {
   return supabase
