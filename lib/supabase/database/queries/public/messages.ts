@@ -54,6 +54,8 @@ export const getMessagesInChannel: QueryFunction<
   const { data: messages, error } = await supabase
     .from('messages')
     .select(MessageQuery.detail)
+    .limit(100)
+    .order('created_at')
     .eq('channel_id', channel_id);
 
   if (error) {
