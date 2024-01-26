@@ -2,8 +2,10 @@ import { Suspense } from 'react';
 import CommunityCardsContainer from './CommunityCardsContainer';
 import CommunityCardSkeleton from './CommunityCardSkeleton';
 import TypographyH2 from '@/components/ui/typography/typography-h2';
+import CommunityCreateButton from './CommunityCreateButton';
+import { UserDb } from '@/lib/types/database/public/users';
 
-const SideNav: React.FC = async () => {
+const SideNav: React.FC<{ user: UserDb }> = async ({ user }) => {
   return (
     <>
       <aside
@@ -24,6 +26,7 @@ const SideNav: React.FC = async () => {
             }
           >
             <CommunityCardsContainer />
+            {user.is_faculty && <CommunityCreateButton />}
           </Suspense>
         </div>
       </aside>

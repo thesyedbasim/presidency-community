@@ -38,11 +38,9 @@ export default async function CommunityLayout({
   }
 
   return (
-    <>
-      <div className="grid grid-rows-[6rem_1fr] h-screen">
-        <CommunityHeader community={community} />
-        {children}
-      </div>
-    </>
+    <div className="grid grid-rows-[6rem_1fr] h-screen">
+      <CommunityHeader community={community} />
+      {children}
+    </div>
   );
 }
