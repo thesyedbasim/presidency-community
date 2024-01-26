@@ -2,7 +2,6 @@
 
 import { createPendingMember } from '@/lib/supabase/database/queries/public/pending_members';
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
-import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 

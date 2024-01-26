@@ -1,5 +1,9 @@
-const CommunityNotFound: React.FC = () => {
-  return <div className="">Community page not found</div>;
+const ChannelNotFound = async () => {
+  return (
+    <div className="grid place-items-center w-full h-screen">
+      Channel page not found
+    </div>
+  );
 };
 
-export default CommunityNotFound;
+export default ChannelNotFound;

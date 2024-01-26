@@ -1,8 +1,9 @@
 'use client';
 
-import { deleteMessageById } from '@/lib/supabase/database/queries/public/messages';
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { deleteMessageById } from '@/lib/supabase/database/queries/public/messages';
+
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 
 const MessageDeleteItem: React.FC<{ message_id: string }> = ({
   message_id,

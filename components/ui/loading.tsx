@@ -1,3 +1,5 @@
+import FadeLoader from 'react-spinners/FadeLoader';
+
 export const Loading: React.FC = () => {
-  return <div className="text-xl">Loading...</div>;
+  return <FadeLoader color="bg-primary" />;
 };

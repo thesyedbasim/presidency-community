@@ -6,7 +6,9 @@ import { notFound, redirect } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
 import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
 
-const fetchCommunityById = unstable_cache(getCommunityById);
+export const fetchCommunityById = unstable_cache(getCommunityById, [
+  'community-by-id',
+]);
 
 export default async function CommunityLayout({
   children,
@@ -24,13 +26,11 @@ export default async function CommunityLayout({
     return redirect('/login');
   }
 
-  const { data: community, error } = await fetchCommunityById(supabase, {
+  const { data: community } = await fetchCommunityById(supabase, {
     community_id: params.community_id,
   });
 
-  if (!community) {
-    return notFound();
-  }
+  if (!community) notFound();
 
   if (community?.members.length === 0) {
     // user is not present in the community

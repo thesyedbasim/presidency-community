@@ -13,12 +13,10 @@ const CommunityCardsContainer: React.FC = async () => {
   const cookieStore = cookies();
   const supabase = createServerComponentClient({ cookies: () => cookieStore });
   const user = await getAuthUser(supabase);
-  const { data: userCommunities, error } = await fetchUserCommunities(
-    supabase,
-    {
-      user_id: user!.id,
-    }
-  );
+  //handle-error
+  const { data: userCommunities } = await fetchUserCommunities(supabase, {
+    user_id: user!.id,
+  });
 
   return (
     <div className="grid grid-flow-row gap-4">

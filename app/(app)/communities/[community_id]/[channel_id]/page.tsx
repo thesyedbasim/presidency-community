@@ -1,6 +1,4 @@
-import { Suspense } from 'react';
 import MessagesContainer from './components/MessagesContainer';
-import { Loading } from '@/components/ui/loading';
 
 const Channel = ({
   params,

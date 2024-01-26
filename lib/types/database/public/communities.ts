@@ -7,6 +7,11 @@ export interface CommunityDb {
   slug: string; // text
   created_by: string; // uuid -> public.users.id
   created_at: string; // timestamptz
+  member_count: number; // int2
+}
+
+export interface CommunityBasic extends CommunityDb {
+  channels: ChannelDb[];
 }
 
 export interface CommunityDetail extends CommunityDb {

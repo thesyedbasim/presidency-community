@@ -1,8 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import cn from 'classnames';
-import { CommunityDetail } from '@/lib/types/database/public/communities';
+import { CommunityBasic } from '@/lib/types/database/public/communities';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import {
@@ -12,12 +11,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import TypographyLarge from '@/components/ui/typography/typography-large';
-import TypographyMuted from '@/components/ui/typography/typography-muted';
 import CommunityChannelLink from './CommunityChannelLink';
 
 const CommunityCard: React.FC<{
-  community: CommunityDetail;
+  community: CommunityBasic;
 }> = ({ community }) => {
   const params = useParams<{ community_id?: string; channel_id?: string }>();
 
@@ -41,7 +38,7 @@ const CommunityCard: React.FC<{
             <div className="grid grid-flow-row">
               <CardTitle>{community.name}</CardTitle>
               <CardDescription>
-                {community.members.length} members
+                {community.member_count} members
               </CardDescription>
             </div>
           </CardHeader>
@@ -55,7 +52,7 @@ const CommunityCard: React.FC<{
         <div className="bg-black w-12 h-12 rounded-full"></div>
         <div className="grid grid-flow-row">
           <CardTitle>{community.name}</CardTitle>
-          <CardDescription>{community.members.length} members</CardDescription>
+          <CardDescription>{community.member_count} members</CardDescription>
         </div>
       </CardHeader>
       <CardContent>
