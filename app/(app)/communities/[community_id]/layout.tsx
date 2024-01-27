@@ -6,7 +6,7 @@ import { notFound, redirect } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
 import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
 
-export const fetchCommunityById = unstable_cache(getCommunityById, [
+const fetchCommunityById = unstable_cache(getCommunityById, [
   'community-by-id',
 ]);
 

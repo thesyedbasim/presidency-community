@@ -1,7 +1,6 @@
 import { QueryFunction } from '@/lib/supabase';
 import {
   CommunityBasic,
-  CommunityDb,
   CommunityDetail,
 } from '@/lib/types/database/public/communities';
 import { MemberDb } from '@/lib/types/database/public/members';

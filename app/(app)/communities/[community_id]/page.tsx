@@ -1,7 +1,12 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { fetchCommunityById } from './layout';
 import { redirect } from 'next/navigation';
+import { unstable_cache } from 'next/cache';
+import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
+
+const fetchCommunityById = unstable_cache(getCommunityById, [
+  'community-by-id',
+]);
 
 const CommunityPage = async ({
   params,
