@@ -6,7 +6,7 @@ import { notFound, redirect } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
 import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
 
-export const fetchCommunityById = unstable_cache(getCommunityById, [
+const fetchCommunityById = unstable_cache(getCommunityById, [
   'community-by-id',
 ]);
 
@@ -38,11 +38,9 @@ export default async function CommunityLayout({
   }
 
   return (
-    <>
-      <div className="grid grid-rows-[6rem_1fr] h-screen">
-        <CommunityHeader community={community} />
-        {children}
-      </div>
-    </>
+    <div className="grid grid-rows-[6rem_1fr] h-screen">
+      <CommunityHeader community={community} />
+      {children}
+    </div>
   );
 }

@@ -5,9 +5,11 @@ import CommunityCard from './CommunityCard';
 import { getAuthUser } from '@/lib/state/auth';
 import { unstable_cache } from 'next/cache';
 
-const fetchUserCommunities = unstable_cache(getCommunitiesByUserId, [
-  'user-communities',
-]);
+const fetchUserCommunities = unstable_cache(
+  getCommunitiesByUserId,
+  ['user-communities'],
+  { tags: ['user-communities'] }
+);
 
 const CommunityCardsContainer: React.FC = async () => {
   const cookieStore = cookies();

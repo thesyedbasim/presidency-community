@@ -16,6 +16,22 @@ enum CommunityQuery {
   detail = '*, channels(*), members(*)',
 }
 
+export const insertCommunity: QueryFunction<
+  { name: string },
+  CommunityBasic
+> = async (supabase, { name }) => {
+  console.log('insert community hit with name as ', name);
+  const { data: newCommunity, error } = await supabase
+    .from('communities')
+    .insert({ name })
+    .select(CommunityQuery.basic)
+    .single();
+
+  if (error) console.error('Error while creating new community', error);
+
+  return { data: newCommunity, error };
+};
+
 export const getCommunitiesByUserId: QueryFunction<
   { user_id: string },
   UserCommunities[]
