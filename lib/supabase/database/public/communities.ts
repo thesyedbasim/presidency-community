@@ -4,8 +4,6 @@ import {
   CommunityDetail,
 } from '@/lib/types/database/public/communities';
 import { MemberDb } from '@/lib/types/database/public/members';
-import { SupabaseClient } from '@supabase/supabase-js';
-import { unstable_cache } from 'next/cache';
 
 interface UserCommunities extends MemberDb {
   community: CommunityBasic;
@@ -35,23 +33,22 @@ export const insertCommunity: QueryFunction<
 };
 
 let x = 0;
-export const getCommunitiesByUserId = (
-  supabase: SupabaseClient,
-  { user_id }: { user_id: string }
-) =>
-  unstable_cache(async () => {
-    console.log('get communnities by user id', x++);
-    const { data, error } = await supabase
-      .from('members')
-      .select(CommunityQuery.user)
-      .eq('user_id', user_id)
-      .eq('is_present', true);
+export const getCommunitiesByUserId: QueryFunction<
+  { user_id: string },
+  UserCommunities[]
+> = async (supabase, { user_id }) => {
+  console.log('get communnities by user id', x++);
+  const { data, error } = await supabase
+    .from('members')
+    .select(CommunityQuery.user)
+    .eq('user_id', user_id)
+    .eq('is_present', true);
 
-    //handle-error
-    if (error) console.error('error while getting user communities', error);
+  //handle-error
+  if (error) console.error('error while getting user communities', error);
 
-    return { data: data || [], error };
-  });
+  return { data: data || [], error };
+};
 
 export const getCommunityById: QueryFunction<
   { community_id: string },

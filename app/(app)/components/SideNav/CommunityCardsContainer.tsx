@@ -9,7 +9,7 @@ const CommunityCardsContainer: React.FC = async () => {
   //handle-error
   const { data: userCommunities } = await getCommunitiesByUserId(supabase, {
     user_id: user!.id,
-  })();
+  });
 
   return (
     <div className="grid grid-flow-row gap-4">

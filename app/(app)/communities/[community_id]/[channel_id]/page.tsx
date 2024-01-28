@@ -3,7 +3,6 @@ import MessagesContainer from './components/MessagesContainer';
 import { createSupabaseClient } from '@/lib/supabase/utils';
 import { getChannelById } from '@/lib/supabase/database/public/channels';
 import { getMessagesInChannel } from '@/lib/supabase/database/public/messages';
-import { unstable_cache } from 'next/cache';
 
 type MetaDataProps = {
   params: { channel_id: string };
