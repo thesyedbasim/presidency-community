@@ -5,6 +5,7 @@ import UserCard from './components/UserCard';
 import { notFound } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
 import { Metadata } from 'next';
+import { createSupabaseClient } from '@/lib/supabase/utils';
 
 export const fetchUser = unstable_cache(getUser, ['public-user'], {
   tags: ['public-user'],
@@ -17,8 +18,7 @@ type MetaDataProps = {
 export async function generateMetadata({
   params,
 }: MetaDataProps): Promise<Metadata> {
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  const supabase = createSupabaseClient('server');
 
   const { data: user } = await fetchUser(supabase, {
     user_id: params.user_id,
@@ -34,8 +34,7 @@ export default async function UserPage({
 }: {
   params: { user_id: string };
 }) {
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  const supabase = createSupabaseClient('server');
 
   // handle-error
   const { data: user } = await fetchUser(supabase, {

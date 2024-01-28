@@ -1,8 +1,7 @@
 'use server';
 
 import { createMessage } from '@/lib/supabase/database/queries/public/messages';
-import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createSupabaseClient } from '@/lib/supabase/utils';
 
 export const sendMessage = async (
   {
@@ -15,9 +14,7 @@ export const sendMessage = async (
   //handle-constraints
   //handle-error
 
-  const cookieStore = cookies();
-
-  const supabase = createServerActionClient({ cookies: () => cookieStore });
+  const supabase = createSupabaseClient('server-action');
 
   try {
     const messageContent = formData.get('message') as string;

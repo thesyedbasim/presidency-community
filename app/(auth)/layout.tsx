@@ -1,11 +1,9 @@
 import '@/app/global.scss';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createSupabaseClient } from '@/lib/supabase/utils';
 import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
 
 const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  const supabase = createSupabaseClient('server');
 
   const {
     data: { session },

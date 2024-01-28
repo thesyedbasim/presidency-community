@@ -1,18 +1,16 @@
 import { getAuthUser } from '@/lib/state/auth';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
 import { getCommunityBasicById } from '@/lib/supabase/database/queries/public/communities';
 import { getMemberByUserAndCommunityById } from '@/lib/supabase/database/queries/public/members';
 import JoinCommunityCard from './components/JoinCommunityCard';
+import { createSupabaseClient } from '@/lib/supabase/utils';
 
 const JoinCommunityPage = async ({
   params,
 }: {
   params: { community_id: string };
 }) => {
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  const supabase = createSupabaseClient('server');
 
   const user = await getAuthUser(supabase);
   if (!user) {

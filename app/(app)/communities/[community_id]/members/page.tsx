@@ -1,12 +1,11 @@
 import { getMembersByCommunityId } from '@/lib/supabase/database/queries/public/members';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import { MembersContainer } from './components/MembersContainer';
 import { PendingMembersContainer } from './components/PendingMembersContainer';
 import { isAdmin } from '@/lib/utils/memberRole';
 import { getAuthUser } from '@/lib/state/auth';
 import { findAuthUserFromMembers } from '@/lib/utils/database/members';
 import { unstable_cache } from 'next/cache';
+import { createSupabaseClient } from '@/lib/supabase/utils';
 
 const fetchMembersByCommunityId = unstable_cache(
   getMembersByCommunityId,
@@ -17,8 +16,7 @@ const fetchMembersByCommunityId = unstable_cache(
 const CommunityMembers: React.FC<{
   params: { community_id: string };
 }> = async ({ params }) => {
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  const supabase = createSupabaseClient('server');
 
   const user = await getAuthUser(supabase);
 

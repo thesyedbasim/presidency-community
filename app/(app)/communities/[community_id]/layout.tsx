@@ -1,10 +1,9 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import CommunityHeader from './components/ui/CommunityHeader';
 import { getAuthUser } from '@/lib/state/auth';
 import { notFound, redirect } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
 import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
+import { createSupabaseClient } from '@/lib/supabase/utils';
 
 const fetchCommunityById = unstable_cache(getCommunityById, [
   'community-by-id',
@@ -17,8 +16,7 @@ export default async function CommunityLayout({
   children: React.ReactNode;
   params: { community_id: string };
 }) {
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  const supabase = createSupabaseClient('server');
 
   const user = await getAuthUser(supabase);
 
