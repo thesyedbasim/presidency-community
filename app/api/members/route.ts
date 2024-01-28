@@ -1,21 +1,19 @@
 import { getAuthUser } from '@/lib/state/auth';
 import { createMemberFromInvitationAccept } from '@/lib/supabase/database/queries/public/members';
+import { createSupabaseClient } from '@/lib/supabase/utils';
 import {
   createNotAuthenticatedResponse,
   createNotAuthorizedResponse,
 } from '@/lib/utils/apiErrorResponses';
 import { isRLSError } from '@/lib/utils/postgrestErrors';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { revalidatePath } from 'next/cache';
-import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
 // pending_member invite accepted
 export const POST = async (req: NextRequest) => {
   console.log('/api/members/ POST route HIT');
 
-  const cookieStore = cookies();
-  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+  const supabase = createSupabaseClient('route-handler');
 
   const user = getAuthUser(supabase);
 

@@ -1,14 +1,12 @@
 import { getAuthUser } from '@/lib/state/auth';
 import { getCommunitiesByUserId } from '@/lib/supabase/database/queries/public/communities';
+import { createSupabaseClient } from '@/lib/supabase/utils';
 import { createNotAuthenticatedResponse } from '@/lib/utils/apiErrorResponses';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
 // get all communities determined by auth user
 export const GET = async (_: NextRequest) => {
-  const cookieStore = cookies();
-  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+  const supabase = createSupabaseClient('route-handler');
 
   const user = await getAuthUser(supabase);
 

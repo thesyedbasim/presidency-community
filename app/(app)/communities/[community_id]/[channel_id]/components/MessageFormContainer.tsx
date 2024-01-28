@@ -1,9 +1,8 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import MessageForm from './MessageForm';
 import { unstable_cache } from 'next/cache';
 import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
+import { createSupabaseClient } from '@/lib/supabase/utils';
 
 const fetchCommunityById = unstable_cache(getCommunityById);
 
@@ -25,9 +24,7 @@ const MessageFormContainer: React.FC<{
   channel_id: string;
   community_id: string;
 }> = async ({ channel_id, community_id }) => {
-  const cookieStore = cookies();
-
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  const supabase = createSupabaseClient('server');
 
   const member_id = await getMemberId(supabase, community_id);
 

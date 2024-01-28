@@ -1,9 +1,8 @@
 import { getAuthUser } from '@/lib/state/auth';
 import { updateMemberPresentStatus } from '@/lib/supabase/database/queries/public/members';
+import { createSupabaseClient } from '@/lib/supabase/utils';
 import { createNotAuthenticatedResponse } from '@/lib/utils/apiErrorResponses';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { revalidatePath } from 'next/cache';
-import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
 // member left, or removed by admin/moderator from the community
@@ -13,9 +12,7 @@ export const DELETE = async (
 ) => {
   console.log('/api/member/[member_id]/ DELETE route HIT');
 
-  const cookieStore = cookies();
-  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
-
+  const supabase = createSupabaseClient('route-handler');
   const user = await getAuthUser(supabase);
 
   if (!user) return createNotAuthenticatedResponse();

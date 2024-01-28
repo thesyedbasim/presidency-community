@@ -1,13 +1,11 @@
 import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createSupabaseClient } from '@/lib/supabase/utils';
 
 export async function GET(
   _: Request,
   { params }: { params: { community_id: string } }
 ) {
-  const cookieStore = cookies();
-  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+  const supabase = createSupabaseClient('route-handler');
 
   const community_id = params.community_id;
 

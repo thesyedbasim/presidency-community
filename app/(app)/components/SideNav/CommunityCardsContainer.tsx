@@ -1,9 +1,8 @@
 import { getCommunitiesByUserId } from '@/lib/supabase/database/queries/public/communities';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import CommunityCard from './CommunityCard';
 import { getAuthUser } from '@/lib/state/auth';
 import { unstable_cache } from 'next/cache';
+import { createSupabaseClient } from '@/lib/supabase/utils';
 
 const fetchUserCommunities = unstable_cache(
   getCommunitiesByUserId,
@@ -12,8 +11,7 @@ const fetchUserCommunities = unstable_cache(
 );
 
 const CommunityCardsContainer: React.FC = async () => {
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  const supabase = createSupabaseClient('server');
   const user = await getAuthUser(supabase);
   //handle-error
   const { data: userCommunities } = await fetchUserCommunities(supabase, {

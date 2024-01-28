@@ -6,6 +6,23 @@ enum ChannelQuery {
 }
 
 /* READ */
+export const getChannelById: QueryFunction<
+  { channel_id: string },
+  ChannelDb
+> = async (supabase, { channel_id }) => {
+  const { data: channel, error } = await supabase
+    .from('channels')
+    .select('*')
+    .eq('id', channel_id)
+    .single();
+
+  if (error) {
+    console.error('error while getting channel by id', error);
+  }
+
+  return { data: channel || null, error };
+};
+
 export const getChannelsByCommunityId: QueryFunction<
   { community_id: string },
   ChannelDb[]
