@@ -1,7 +1,7 @@
 'use client';
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { deleteMessageById } from '@/lib/supabase/database/queries/public/messages';
+import { deleteMessageById } from '@/lib/supabase/database/public/messages';
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 

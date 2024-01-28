@@ -1,22 +1,15 @@
-import { getMembersByCommunityId } from '@/lib/supabase/database/queries/public/members';
+import { getMembersByCommunityId } from '@/lib/supabase/database/public/members';
 import { MembersContainer } from './components/MembersContainer';
 import { PendingMembersContainer } from './components/PendingMembersContainer';
 import { isAdmin } from '@/lib/utils/memberRole';
-import { getAuthUser } from '@/lib/state/auth';
+import { getAuthUser } from '@/lib/supabase/database/auth/users';
 import { findAuthUserFromMembers } from '@/lib/utils/database/members';
-import { unstable_cache } from 'next/cache';
 import { createSupabaseClient } from '@/lib/supabase/utils';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Members',
 };
-
-const fetchMembersByCommunityId = unstable_cache(
-  getMembersByCommunityId,
-  ['members-list'],
-  { tags: ['members'] }
-);
 
 const CommunityMembers: React.FC<{
   params: { community_id: string };
@@ -25,7 +18,7 @@ const CommunityMembers: React.FC<{
 
   const user = await getAuthUser(supabase);
 
-  const { data: members } = await fetchMembersByCommunityId(supabase, {
+  const { data: members } = await getMembersByCommunityId(supabase, {
     community_id: params.community_id,
   });
 

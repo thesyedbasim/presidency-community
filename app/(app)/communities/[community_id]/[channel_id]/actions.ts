@@ -1,6 +1,6 @@
 'use server';
 
-import { createMessage } from '@/lib/supabase/database/queries/public/messages';
+import { createMessage } from '@/lib/supabase/database/public/messages';
 import { createSupabaseClient } from '@/lib/supabase/utils';
 
 export const sendMessage = async (

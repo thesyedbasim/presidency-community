@@ -1,4 +1,4 @@
-import { getAuthUser } from '@/lib/state/auth';
+import { getAuthUser } from '@/lib/supabase/database/auth/users';
 import { QueryFunction } from '@/lib/supabase';
 import { MemberDetail } from '@/lib/types/database/public/members';
 import { isEmptyError } from '@/lib/utils/postgrestErrors';

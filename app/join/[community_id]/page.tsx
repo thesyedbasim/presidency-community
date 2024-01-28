@@ -1,7 +1,7 @@
-import { getAuthUser } from '@/lib/state/auth';
+import { getAuthUser } from '@/lib/supabase/database/auth/users';
 import { redirect } from 'next/navigation';
-import { getCommunityBasicById } from '@/lib/supabase/database/queries/public/communities';
-import { getMemberByUserAndCommunityById } from '@/lib/supabase/database/queries/public/members';
+import { getCommunityBasicById } from '@/lib/supabase/database/public/communities';
+import { getMemberByUserAndCommunityById } from '@/lib/supabase/database/public/members';
 import JoinCommunityCard from './components/JoinCommunityCard';
 import { createSupabaseClient } from '@/lib/supabase/utils';
 

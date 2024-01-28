@@ -1,5 +1,5 @@
-import { getAuthUser } from '@/lib/state/auth';
-import { getCommunitiesByUserId } from '@/lib/supabase/database/queries/public/communities';
+import { getAuthUser } from '@/lib/supabase/database/auth/users';
+import { getCommunitiesByUserId } from '@/lib/supabase/database/public/communities';
 import { createSupabaseClient } from '@/lib/supabase/utils';
 import { createNotAuthenticatedResponse } from '@/lib/utils/apiErrorResponses';
 import { NextRequest } from 'next/server';

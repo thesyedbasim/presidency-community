@@ -1,12 +1,7 @@
 import { redirect } from 'next/navigation';
-import { unstable_cache } from 'next/cache';
-import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
+import { getCommunityById } from '@/lib/supabase/database/public/communities';
 import { createSupabaseClient } from '@/lib/supabase/utils';
 import { Metadata } from 'next';
-
-const fetchCommunityById = unstable_cache(getCommunityById, [
-  'community-by-id',
-]);
 
 type MetaDataProps = {
   params: { community_id: string };
@@ -17,7 +12,7 @@ export async function generateMetadata({
 }: MetaDataProps): Promise<Metadata> {
   const supabase = createSupabaseClient('server');
 
-  const { data: community } = await fetchCommunityById(supabase, {
+  const { data: community } = await getCommunityById(supabase, {
     community_id: params.community_id,
   });
 
@@ -33,7 +28,7 @@ const CommunityPage = async ({
 }) => {
   const supabase = createSupabaseClient('server');
 
-  const { data: community } = await fetchCommunityById(supabase, {
+  const { data: community } = await getCommunityById(supabase, {
     community_id: params.community_id,
   });
 

@@ -1,6 +1,6 @@
 'use server';
 
-import { createPendingMember } from '@/lib/supabase/database/queries/public/pending_members';
+import { createPendingMember } from '@/lib/supabase/database/public/pending_members';
 import { redirect } from 'next/navigation';
 import { createSupabaseClient } from '@/lib/supabase/utils';
 

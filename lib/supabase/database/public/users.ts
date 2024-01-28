@@ -5,7 +5,7 @@ enum UserQuery {
   db = '*',
 }
 
-export const getUser: QueryFunction<{ user_id: string }, UserDb> = async (
+export const getUserById: QueryFunction<{ user_id: string }, UserDb> = async (
   supabase,
   { user_id }
 ) => {

@@ -1,4 +1,4 @@
-import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
+import { getCommunityById } from '@/lib/supabase/database/public/communities';
 import { createSupabaseClient } from '@/lib/supabase/utils';
 
 export async function GET(

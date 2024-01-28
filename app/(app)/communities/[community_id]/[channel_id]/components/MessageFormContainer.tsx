@@ -1,21 +1,19 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import MessageForm from './MessageForm';
-import { unstable_cache } from 'next/cache';
-import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
+import { getCommunityById } from '@/lib/supabase/database/public/communities';
 import { createSupabaseClient } from '@/lib/supabase/utils';
-
-const fetchCommunityById = unstable_cache(getCommunityById);
+import { getAuthUser } from '@/lib/supabase/database/auth/users';
 
 const getMemberId = async (supabase: SupabaseClient, community_id: string) => {
   //handle-error invalid community id
-  const { data: community } = await fetchCommunityById(supabase, {
+  const { data: community } = await getCommunityById(supabase, {
     community_id,
   });
   const memberList = community!.members;
 
-  const userRes = await supabase.auth.getUser();
+  const user = await getAuthUser(supabase);
 
-  const member = memberList.find((m) => m.user_id === userRes.data.user!.id);
+  const member = memberList.find((m) => m.user_id === user?.id);
 
   return member!.id;
 };
