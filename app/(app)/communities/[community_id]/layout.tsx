@@ -4,10 +4,33 @@ import { notFound, redirect } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
 import { getCommunityById } from '@/lib/supabase/database/queries/public/communities';
 import { createSupabaseClient } from '@/lib/supabase/utils';
+import { Metadata } from 'next';
 
 const fetchCommunityById = unstable_cache(getCommunityById, [
   'community-by-id',
 ]);
+
+type MetaDataProps = {
+  params: { community_id: string };
+};
+
+export async function generateMetadata({
+  params,
+}: MetaDataProps): Promise<Metadata> {
+  const supabase = createSupabaseClient('server');
+
+  const { data: community } = await fetchCommunityById(supabase, {
+    community_id: params.community_id,
+  });
+
+  return {
+    title: {
+      template: `%s | ${community.name}`,
+      default: community.name,
+    },
+    description: `${community.member_count} members`,
+  };
+}
 
 export default async function CommunityLayout({
   children,

@@ -6,6 +6,11 @@ import { getAuthUser } from '@/lib/state/auth';
 import { findAuthUserFromMembers } from '@/lib/utils/database/members';
 import { unstable_cache } from 'next/cache';
 import { createSupabaseClient } from '@/lib/supabase/utils';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Members',
+};
 
 const fetchMembersByCommunityId = unstable_cache(
   getMembersByCommunityId,

@@ -1,13 +1,11 @@
 import { getUser } from '@/lib/supabase/database/queries/public/users';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import UserCard from './components/UserCard';
 import { notFound } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
 import { Metadata } from 'next';
 import { createSupabaseClient } from '@/lib/supabase/utils';
 
-export const fetchUser = unstable_cache(getUser, ['public-user'], {
+const fetchUser = unstable_cache(getUser, ['public-user'], {
   tags: ['public-user'],
 });
 

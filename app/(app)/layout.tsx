@@ -2,6 +2,11 @@ import SideNav from './components/SideNav';
 import './globals.scss';
 import { redirect } from 'next/navigation';
 import { createSupabaseClient } from '@/lib/supabase/utils';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Presidency Communities',
+};
 
 export default async function RootLayout({
   children,

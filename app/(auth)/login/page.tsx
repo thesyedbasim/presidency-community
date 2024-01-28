@@ -1,7 +1,7 @@
 import type { Metadata, NextPage } from 'next';
 import LoginCard from './components/LoginCard';
 
-export const metaData: Metadata = {
+export const metadata: Metadata = {
   title: 'Login',
 };
 
