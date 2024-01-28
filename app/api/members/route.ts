@@ -1,5 +1,5 @@
-import { getAuthUser } from '@/lib/state/auth';
-import { createMemberFromInvitationAccept } from '@/lib/supabase/database/queries/public/members';
+import { getAuthUser } from '@/lib/supabase/database/auth/users';
+import { createMemberFromInvitationAccept } from '@/lib/supabase/database/public/members';
 import { createSupabaseClient } from '@/lib/supabase/utils';
 import {
   createNotAuthenticatedResponse,

@@ -1,5 +1,5 @@
-import { getAuthUser } from '@/lib/state/auth';
-import { updateMemberPresentStatus } from '@/lib/supabase/database/queries/public/members';
+import { getAuthUser } from '@/lib/supabase/database/auth/users';
+import { updateMemberPresentStatus } from '@/lib/supabase/database/public/members';
 import { createSupabaseClient } from '@/lib/supabase/utils';
 import { createNotAuthenticatedResponse } from '@/lib/utils/apiErrorResponses';
 import { revalidatePath } from 'next/cache';

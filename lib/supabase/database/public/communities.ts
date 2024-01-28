@@ -32,10 +32,12 @@ export const insertCommunity: QueryFunction<
   return { data: newCommunity, error };
 };
 
+let x = 0;
 export const getCommunitiesByUserId: QueryFunction<
   { user_id: string },
   UserCommunities[]
 > = async (supabase, { user_id }) => {
+  console.log('get communnities by user id', x++);
   const { data, error } = await supabase
     .from('members')
     .select(CommunityQuery.user)

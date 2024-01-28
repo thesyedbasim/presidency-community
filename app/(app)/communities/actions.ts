@@ -1,6 +1,6 @@
 'use server';
 
-import { insertCommunity } from '@/lib/supabase/database/queries/public/communities';
+import { insertCommunity } from '@/lib/supabase/database/public/communities';
 import { redirect } from 'next/navigation';
 import { revalidateTag } from 'next/cache';
 import { createSupabaseClient } from '@/lib/supabase/utils';

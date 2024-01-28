@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import { subscribeToPendingMembers } from '@/lib/supabase/realtime';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { getPendingMembersByCommunityId } from '@/lib/supabase/database/queries/public/pending_members';
+import { getPendingMembersByCommunityId } from '@/lib/supabase/database/public/pending_members';
 
 type CardProps = React.ComponentProps<typeof Card>;
 

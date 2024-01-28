@@ -30,10 +30,12 @@ export const createMessage: QueryFunction<
 };
 
 /* READ */
+let y = 0;
 export const getMessageById: QueryFunction<
   { message_id: string },
   MessageDetail | null
 > = async (supabase, { message_id }) => {
+  console.log('get message by id', y++);
   const { data: message, error } = await supabase
     .from('messages')
     .select(MessageQuery.detail)
@@ -46,11 +48,12 @@ export const getMessageById: QueryFunction<
 
   return { data: message, error };
 };
-
+let x = 0;
 export const getMessagesInChannel: QueryFunction<
   { channel_id: string },
   MessageDetail[]
 > = async (supabase, { channel_id }) => {
+  console.log('get messages in channel', x++);
   const { data: messages, error } = await supabase
     .from('messages')
     .select(MessageQuery.detail)

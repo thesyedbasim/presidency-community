@@ -4,24 +4,20 @@ import { MessageDb, MessageDetail } from '@/lib/types/database/public/messages';
 import MessageCard from './MessageCard';
 import { useEffect, useRef, useState } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import {
-  getMessageById,
-  getMessagesInChannel,
-} from '@/lib/supabase/database/queries/public/messages';
+import { getMessageById } from '@/lib/supabase/database/public/messages';
 import { subscribeToChannelMessages } from '@/lib/supabase/realtime';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
-import MessageCardSkeleton from './MessageCardSkeleton';
-import { getMemberFromAuthUser } from '@/lib/supabase/database/queries/public/members';
+import { getMemberFromAuthUser } from '@/lib/supabase/database/public/members';
 import { MemberDetail } from '@/lib/types/database/public/members';
 
 const MessagesContainer: React.FC<{
+  messages: MessageDetail[];
   community_id: string;
   channel_id: string;
-}> = ({ community_id, channel_id }) => {
+}> = ({ messages, community_id, channel_id }) => {
   const supabase = createClientComponentClient();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [messages, setMessages] = useState<MessageDetail[]>([]);
+  const [clientMessages, setClientMessages] = useState<MessageDetail[]>([]);
   const [authMember, setAuthMember] = useState<MemberDetail | null>(null);
   const lastMessageRef = useRef<HTMLDivElement | null>(null);
 
@@ -42,18 +38,7 @@ const MessagesContainer: React.FC<{
 
   //handle-error
   useEffect(() => {
-    async function setMessagesValue() {
-      setIsLoading(true);
-      const sbUserRes = await supabase.auth.getUser();
-      if (!sbUserRes.data.user) return;
-
-      const { data: messagesData } = await getMessagesInChannel(supabase, {
-        channel_id,
-      });
-
-      setMessages(messagesData);
-      setIsLoading(false);
-    }
+    setClientMessages(messages);
 
     const messageChannel = subscribeToChannelMessages(
       supabase,
@@ -64,11 +49,11 @@ const MessagesContainer: React.FC<{
             ({ data: message }) => {
               if (!message) return;
 
-              setMessages((prevMessages) => [...prevMessages, message]);
+              setClientMessages((prevMessages) => [...prevMessages, message]);
             }
           );
         } else if (payload.eventType === 'DELETE') {
-          setMessages((prevMessages) => {
+          setClientMessages((prevMessages) => {
             const filteredMessages = prevMessages.filter(
               (msg) => msg.id !== payload.old.id
             );
@@ -79,24 +64,12 @@ const MessagesContainer: React.FC<{
       }
     );
 
-    setMessagesValue();
-
     return () => {
       supabase.removeChannel(messageChannel);
     };
-  }, [community_id, channel_id, supabase]);
+  }, [community_id, channel_id, supabase, messages]);
 
-  if (isLoading)
-    return (
-      <>
-        <MessageCardSkeleton />
-        <MessageCardSkeleton />
-        <MessageCardSkeleton />
-        <MessageCardSkeleton />
-      </>
-    );
-
-  return messages.map((message) => (
+  return clientMessages.map((message) => (
     <MessageCard
       key={message.id}
       message={message}
