@@ -2,6 +2,7 @@ import { QueryFunction } from '@/lib/supabase';
 import {
   CommunityBasic,
   CommunityDetail,
+  CommunityProfile,
 } from '@/lib/types/database/public/communities';
 import { MemberDb } from '@/lib/types/database/public/members';
 
@@ -14,8 +15,10 @@ enum CommunityQuery {
   basic = '*, channels(*)',
   user = '*, community:community_id(*, channels(*))',
   detail = '*, channels(*), members(*)',
+  profile = '*, created_by_user:created_by(*)',
 }
 
+/* CREATE */
 export const insertCommunity: QueryFunction<
   { name: string },
   CommunityBasic
@@ -32,12 +35,11 @@ export const insertCommunity: QueryFunction<
   return { data: newCommunity, error };
 };
 
-let x = 0;
+/* READ */
 export const getCommunitiesByUserId: QueryFunction<
   { user_id: string },
   UserCommunities[]
 > = async (supabase, { user_id }) => {
-  console.log('get communnities by user id', x++);
   const { data, error } = await supabase
     .from('members')
     .select(CommunityQuery.user)
@@ -78,4 +80,68 @@ export const getCommunityBasicById: QueryFunction<
   if (error) console.error('error while fetching communtity by id', error);
 
   return { data: data || null, error };
+};
+
+export const getCommunityProfileById: QueryFunction<
+  { community_id: string },
+  CommunityProfile
+> = async (supabase, { community_id }) => {
+  const { data, error } = await supabase
+    .from('communities')
+    .select(CommunityQuery.profile)
+    .eq('id', community_id)
+    .single();
+
+  if (error)
+    console.error('error while fetching communtity profile by id', error);
+
+  return { data: data || null, error };
+};
+
+/* UPDATE */
+export const updateCommunityNameById: QueryFunction<
+  { community_id: string; name: string },
+  { name: string }
+> = async (supabase, { community_id, name }) => {
+  const { data, error } = await supabase
+    .from('communities')
+    .update({ name })
+    .eq('id', community_id)
+    .select('name')
+    .single();
+
+  if (error) console.error('error while updating community name by id', error);
+
+  return { data: data!, error };
+};
+
+export const updateCommunityDescriptionById: QueryFunction<
+  { community_id: string; description: string },
+  { description: string }
+> = async (supabase, { community_id, description }) => {
+  const { data, error } = await supabase
+    .from('communities')
+    .update({ description })
+    .eq('id', community_id)
+    .select('description')
+    .single();
+
+  if (error) console.error('error while updating community desc by id', error);
+
+  return { data: data!, error };
+};
+
+/* DELETE */
+export const deleteCommunityById: QueryFunction<
+  { community_id: string },
+  null
+> = async (supabase, { community_id }) => {
+  const { error } = await supabase
+    .from('communities')
+    .delete()
+    .eq('id', community_id);
+
+  if (error) console.error('error while deleting community by id', error);
+
+  return { data: null, error };
 };
