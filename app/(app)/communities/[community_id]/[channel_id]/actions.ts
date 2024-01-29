@@ -1,7 +1,28 @@
 'use server';
 
+import { insertChannel } from '@/lib/supabase/database/public/channels';
 import { createMessage } from '@/lib/supabase/database/public/messages';
 import { createSupabaseClient } from '@/lib/supabase/utils';
+import { redirect } from 'next/navigation';
+
+export const createChannel = async ({
+  community_id,
+  channelName,
+  redirectUrl = `/communities/${community_id}/settings`,
+}: {
+  community_id: string;
+  channelName: string;
+  redirectUrl?: string;
+}) => {
+  const supabase = createSupabaseClient('server-action');
+
+  const { error } = await insertChannel(supabase, {
+    community_id,
+    name: channelName,
+  });
+
+  if (!error) redirect(redirectUrl);
+};
 
 export const sendMessage = async (
   {
